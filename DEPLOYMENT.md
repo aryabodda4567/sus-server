@@ -131,6 +131,29 @@ If you encounter errors like "UNAUTHENTICATED: Request had invalid authenticatio
 5. **Verify project ID**:
    - Make sure the project ID in your credentials matches your Firebase project
 
+6. **Enable the Firestore API**:
+   - Go to the [Google Cloud Console](https://console.cloud.google.com/)
+   - Select your project
+   - Navigate to APIs & Services → Dashboard
+   - Click "+ ENABLE APIS AND SERVICES"
+   - Search for "Firestore API" and enable it
+
+7. **Check IAM permissions**:
+   - Go to the [Google Cloud Console](https://console.cloud.google.com/)
+   - Navigate to IAM & Admin → IAM
+   - Find your service account and ensure it has the following roles:
+     - Firebase Admin SDK Administrator Service Agent
+     - Cloud Datastore User
+     - Service Account User
+
+8. **Verify the service account is active**:
+   - Go to IAM & Admin → Service Accounts
+   - Ensure your service account is not disabled
+
+9. **Check Firebase project settings**:
+   - Make sure your Firebase project has Firestore enabled
+   - Go to Firebase Console → Firestore Database and check if it's set up
+
 ## Production Deployment Checklist
 
 - [ ] All dependencies are installed
