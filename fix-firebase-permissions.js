@@ -1,6 +1,6 @@
 /**
  * This script checks and fixes common Firebase credential permission issues
- * Run with: node fix-firebase-permissions.js
+ * Run with: npm run fix-firebase
  */
 
 const fs = require('fs');
@@ -48,26 +48,26 @@ async function main() {
             console.log('Then run this script again.');
             process.exit(1);
         }
-        
+
         // Get credentials
         const credentials = getFirebaseCredentials();
         if (!credentials) {
             console.error('❌ Could not load Firebase credentials.');
             process.exit(1);
         }
-        
+
         // Extract project ID and service account email
         const projectId = credentials.project_id;
         const serviceAccountEmail = credentials.client_email;
-        
+
         if (!projectId || !serviceAccountEmail) {
             console.error('❌ Invalid credentials: missing project_id or client_email.');
             process.exit(1);
         }
-        
+
         console.log(`Project ID: ${projectId}`);
         console.log(`Service Account: ${serviceAccountEmail}`);
-        
+
         // Authenticate with gcloud (if needed)
         console.log('\nChecking gcloud authentication...');
         try {
@@ -83,7 +83,7 @@ async function main() {
             console.log('Please run: gcloud auth login');
             process.exit(1);
         }
-        
+
         // Set the current project
         console.log(`\nSetting current project to: ${projectId}`);
         try {
@@ -93,7 +93,7 @@ async function main() {
             console.error('❌ Error setting project:', error.message);
             process.exit(1);
         }
-        
+
         // Check if Firestore API is enabled
         console.log('\nChecking if Firestore API is enabled...');
         try {
@@ -109,7 +109,7 @@ async function main() {
             console.error('❌ Error checking/enabling Firestore API:', error.message);
             console.log('Please enable the Firestore API manually in the Google Cloud Console.');
         }
-        
+
         // Check and add IAM roles
         console.log('\nChecking and adding required IAM roles...');
         const requiredRoles = [
@@ -117,7 +117,7 @@ async function main() {
             'roles/firebase.sdkAdminServiceAgent',
             'roles/iam.serviceAccountUser'
         ];
-        
+
         for (const role of requiredRoles) {
             try {
                 console.log(`Checking role: ${role}`);
@@ -127,13 +127,13 @@ async function main() {
                 console.error(`❌ Error adding role ${role}:`, error.message);
             }
         }
-        
+
         console.log('\n✅ Firebase permissions setup completed!');
         console.log('\nIf you still encounter authentication issues, please:');
         console.log('1. Go to the Firebase Console → Project Settings → Service Accounts');
         console.log('2. Generate a new private key');
         console.log('3. Replace your existing firebase_cred.json file with the new one');
-        
+
     } catch (error) {
         console.error('\n❌ An error occurred:', error.message);
         process.exit(1);

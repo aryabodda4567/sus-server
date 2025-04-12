@@ -7,11 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "verify-firebase": "node verify-firebase-credentials.js",
-    "fix-firebase": "node fix-firebase-permissions.js",
-    "docker-build": "docker build -t kuberium-backend .",
-    "docker-run": "docker run -p 3001:3001 -v $(pwd)/src/config/firebase/firebase_cred.json:/app/src/config/firebase/firebase_cred.json:ro -v $(pwd)/uploads:/app/uploads kuberium-backend",
-    "docker-compose": "docker-compose up -d",
-    "docker-compose-build": "docker-compose up -d --build"
+    "fix-firebase": "node fix-firebase-permissions.js"
   },
   "keywords": [],
   "author": "",
