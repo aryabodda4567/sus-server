@@ -1,13 +1,53 @@
 const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const os = require('os');
+const path = require('path');
+require('dotenv').config();
+
+// Import routes
 const usersRoutes = require('./routes/users');
+const expertsRoutes = require('./routes/experts');
+const postsRoutes = require('./routes/posts');
+const accountAggregatorRoutes = require('./routes/accountAggregator');
+const docsRoutes = require('./routes/docs');
+const healthRoutes = require('./routes/health');
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
+app.use(cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true
+}));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Session configuration
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+}));
+
+// Static files for uploads
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// Routes
 app.use('/api/users', usersRoutes);
+app.use('/api/experts', expertsRoutes);
+app.use('/api/posts', postsRoutes);
+app.use('/api/account-aggregator', accountAggregatorRoutes);
+app.use('/api/docs', docsRoutes);
+app.use('/api/health', healthRoutes);
 
 
 app.get('/', (req, res) => {

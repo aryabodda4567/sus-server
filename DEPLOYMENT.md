@@ -154,6 +154,70 @@ If you encounter errors like "UNAUTHENTICATED: Request had invalid authenticatio
    - Make sure your Firebase project has Firestore enabled
    - Go to Firebase Console → Firestore Database and check if it's set up
 
+## Docker Deployment
+
+This project includes Docker support for easy deployment.
+
+### Using Docker Compose (Recommended)
+
+1. Make sure Docker and Docker Compose are installed on your system
+2. Ensure your Firebase credentials file is at `src/config/firebase/firebase_cred.json`
+3. Run the following command:
+
+```bash
+npm run docker-compose-build
+```
+
+This will build the Docker image and start the container with the proper volume mounts for Firebase credentials and uploads.
+
+### Using Docker Directly
+
+1. Build the Docker image:
+
+```bash
+npm run docker-build
+```
+
+2. Run the Docker container:
+
+```bash
+npm run docker-run
+```
+
+### Troubleshooting Docker Deployment
+
+If you encounter Firebase authentication issues in Docker:
+
+1. **Check volume mounts**: Make sure the Firebase credentials file is properly mounted:
+
+```bash
+docker exec -it <container_id> ls -la /app/src/config/firebase
+```
+
+2. **Check environment variables**: Verify that the GOOGLE_APPLICATION_CREDENTIALS environment variable is set correctly:
+
+```bash
+docker exec -it <container_id> printenv | grep GOOGLE
+```
+
+3. **Check container logs**:
+
+```bash
+docker logs <container_id>
+```
+
+4. **Access the container shell**:
+
+```bash
+docker exec -it <container_id> /bin/sh
+```
+
+5. **Verify the health endpoint**:
+
+```bash
+curl http://localhost:3001/api/health
+```
+
 ## Production Deployment Checklist
 
 - [ ] All dependencies are installed
@@ -164,6 +228,7 @@ If you encounter errors like "UNAUTHENTICATED: Request had invalid authenticatio
 - [ ] File uploads work correctly
 - [ ] Authentication works correctly
 - [ ] Database connections are established
+- [ ] Docker container health check passes
 
 ## Monitoring and Maintenance
 
@@ -171,3 +236,4 @@ If you encounter errors like "UNAUTHENTICATED: Request had invalid authenticatio
 - Monitor server performance
 - Keep dependencies up to date
 - Backup database regularly
+- Monitor Docker container health
