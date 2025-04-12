@@ -5,7 +5,8 @@
   "scripts": {
     "prestart": "node check-dependencies.js",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "verify-firebase": "node verify-firebase-credentials.js"
   },
   "keywords": [],
   "author": "",

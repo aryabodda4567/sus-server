@@ -38,7 +38,42 @@ CLIENT_URL=https://your-frontend-url.com
 
 ### 4. Firebase Configuration
 
-Create a `firebase_cred.json` file in the `src/config/firebase/` directory with your Firebase service account credentials.
+You have two options for configuring Firebase credentials:
+
+#### Option 1: Using a credentials file (recommended for development)
+
+1. Create a `firebase_cred.json` file in the `src/config/firebase/` directory with your Firebase service account credentials.
+2. Make sure the file has the following structure:
+   ```json
+   {
+     "type": "service_account",
+     "project_id": "your-project-id",
+     "private_key_id": "your-private-key-id",
+     "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
+     "client_email": "your-service-account-email@your-project-id.iam.gserviceaccount.com",
+     "client_id": "your-client-id",
+     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+     "token_uri": "https://oauth2.googleapis.com/token",
+     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+     "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/your-service-account-email%40your-project-id.iam.gserviceaccount.com"
+   }
+   ```
+
+#### Option 2: Using environment variables (recommended for production)
+
+1. Set the `FIREBASE_CREDENTIALS` environment variable with the JSON content of your service account credentials.
+2. For example, in your `.env` file:
+   ```
+   FIREBASE_CREDENTIALS='{"type":"service_account","project_id":"your-project-id","private_key_id":"your-private-key-id","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n","client_email":"your-service-account-email@your-project-id.iam.gserviceaccount.com","client_id":"your-client-id","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"https://www.googleapis.com/robot/v1/metadata/x509/your-service-account-email%40your-project-id.iam.gserviceaccount.com"}'
+   ```
+
+#### Verify Firebase Credentials
+
+To verify that your Firebase credentials are valid and working correctly, run:
+
+```bash
+npm run verify-firebase
+```
 
 ### 5. Build and Start
 
@@ -70,6 +105,31 @@ Make sure the `uploads` directory exists and has proper permissions:
 mkdir -p uploads
 chmod 755 uploads
 ```
+
+### Firebase Authentication Errors
+
+If you encounter errors like "UNAUTHENTICATED: Request had invalid authentication credentials", follow these steps:
+
+1. **Verify your credentials**:
+   ```bash
+   npm run verify-firebase
+   ```
+
+2. **Check service account permissions**:
+   - Make sure your service account has the necessary permissions in the Firebase console
+   - Required roles: Firebase Admin SDK Administrator Service Agent, Cloud Datastore User
+
+3. **Regenerate service account key**:
+   - Go to Firebase Console → Project Settings → Service Accounts
+   - Generate a new private key
+   - Replace your existing `firebase_cred.json` file with the new one
+
+4. **Check for formatting issues**:
+   - Ensure the private key in your credentials file has proper newline characters
+   - If using environment variables, make sure the JSON is properly escaped
+
+5. **Verify project ID**:
+   - Make sure the project ID in your credentials matches your Firebase project
 
 ## Production Deployment Checklist
 
