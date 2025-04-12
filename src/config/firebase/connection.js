@@ -25,7 +25,9 @@ function getFirebaseCredentials() {
     }
 
     // If we get here, we couldn't load credentials
-    throw new Error('Firebase credentials not found. Please set FIREBASE_CREDENTIALS environment variable or provide firebase_cred.json file.');
+    console.error('Firebase credentials not found. Please create a firebase_cred.json file in the src/config/firebase directory.');
+    console.error('For immediate use, please save the credentials provided to you as firebase_cred.json');
+    throw new Error('Firebase credentials not found');
 }
 
 // Get Firebase credentials
